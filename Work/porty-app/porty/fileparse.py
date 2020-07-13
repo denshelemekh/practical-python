@@ -1,16 +1,28 @@
-# fileparse.py
+"""
+CSV parsing function.
 
+© Denis Shelemekh, 2020
+"""
 import csv
+from typing import List, Iterable, Union, Any
+import logging
 
 
-def parse_csv(lines, select: list = None, types: list = None, has_headers: bool = True,
-              delimiter: str = ',', silence_errors: bool = False) -> list:
+log = logging.getLogger(__name__)
+
+
+def parse_csv(lines: Iterable[str],
+              select: List[str] = None,
+              types: List[Any] = None,
+              has_headers: bool = True,
+              delimiter: str = ',',
+              silence_errors: bool = False) -> List[Union[dict, tuple]]:
     """
-    Parses a CSV file into a list of records with optional conversion.
+    Parses a CSV iterable into a list of records with optional conversion.
 
     Args:
-        lines: Lines to process records from.
-        select: List of names of headers (string) to select from the file.
+        lines: Iterable to process records from.
+        select: List of names of headers (string) to select from the data.
         types: List of functions (objects) to convert input values to.
         has_headers: Boolean - signals if file has headers as the first line.
         delimiter: String delimiter that is passed to csv.reader().
@@ -49,10 +61,10 @@ def parse_csv(lines, select: list = None, types: list = None, has_headers: bool 
         if types:
             try:
                 row = [func(val) for func, val in zip(types, row)]
-            except ValueError as e:
+            except ValueError as exception:
                 if not silence_errors:
-                    print(f"Row {row_num}: Couldn't convert {row}")
-                    print(f"Row {row_num}: reason {e}")
+                    log.warning(f"Row {row_num}: Couldn't convert {row}")
+                    log.debug(f"Row {row_num}: Reason {exception}")
                 continue
         if has_headers:
             record = dict(zip(headers, row))
