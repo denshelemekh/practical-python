@@ -8,16 +8,9 @@ import re
 from typing import List, Tuple
 import logging
 
-# try:
-from . import fileparse
-from . import stock
-from . import tableformat
-from . import portfolio
-# except ImportError:
-#     import fileparse
-#     import stock
-#     import tableformat
-#     import portfolio
+from porty import fileparse
+from porty import tableformat
+from porty import portfolio
 
 
 def read_portfolio(filename: str, **opts) -> portfolio.Portfolio:
@@ -51,17 +44,17 @@ def read_prices(filename: str) -> dict:
     return prices
 
 
-def make_report(portfolio: List[stock.Stock], prices: dict) -> List[tuple]:
+def make_report(_portfolio: portfolio.Portfolio, prices: dict) -> List[tuple]:
     """
     Makes report from supplied data.
     Args:
-        portfolio: List of stock.Stock objects.
+        _portfolio: List of stock.Stock objects.
         prices: Dict consisting of stock names with prices.
     Returns:
         A list of tuples for reporting.
     """
     report = []
-    for _stock in portfolio:
+    for _stock in _portfolio:
         entry = _stock.name, _stock.shares, prices[_stock.name], \
                 prices[_stock.name] - _stock.price
         report.append(entry)
@@ -106,9 +99,9 @@ def portfolio_report(portfolio_filename: str,
         prices_filename: String - name of file for (updated) stock prices.
         fmt: String - abbreviation of format to generate report in.
     """
-    portfolio = read_portfolio(portfolio_filename)
+    _portfolio = read_portfolio(portfolio_filename)
     prices = read_prices(prices_filename)
-    report = make_report(portfolio, prices)
+    report = make_report(_portfolio, prices)
     formatter = tableformat.create_formatter(fmt)
     print_report(report, formatter)
 

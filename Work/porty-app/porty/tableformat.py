@@ -11,25 +11,22 @@ Defines following classes for outputting report data:
 
 from typing import List, Union, Tuple
 
-# try:
-from . import stock
-from . import exceptions
-# except ImportError:
-#     import stock
-#     import exceptions
+from porty import stock
+from porty import exceptions
+
 
 class TableFormatter:
     """
     Abstract base class for table formatters.
     """
 
-    def headings(self, headers):
+    def headings(self, headers: Union[List[str], Tuple[str]]) -> None:
         """
         Emit the table headings.
         """
         raise NotImplementedError()
 
-    def row(self, row_data):
+    def row(self, row_data: Union[List[str], Tuple[str]]) -> None:
         """
         Emit a single row of table data.
         """
@@ -43,6 +40,7 @@ class TextTableFormatter(TableFormatter):
     def headings(self, headers: Union[List[str], Tuple[str]]) -> None:
         """
         Output headers.
+
         Args:
              headers: List or tuple of str headers.
         """
@@ -54,6 +52,7 @@ class TextTableFormatter(TableFormatter):
     def row(self, row_data: Union[List[str], Tuple[str]]) -> None:
         """
         Output row.
+
         Args:
              row_data: List or tuple of str fields.
         """
@@ -69,6 +68,7 @@ class CSVTableFormatter(TableFormatter):
     def headings(self, headers: Union[List[str], Tuple[str]]) -> None:
         """
         Output headers.
+
         Args:
              headers: List or tuple of str headers.
         """
@@ -77,6 +77,7 @@ class CSVTableFormatter(TableFormatter):
     def row(self, row_data: Union[List[str], Tuple[str]]) -> None:
         """
         Output row.
+
         Args:
              row_data: List or tuple of str fields.
         """
@@ -90,6 +91,7 @@ class HTMLTableFormatter(TableFormatter):
     def headings(self, headers: Union[List[str], Tuple[str]]) -> None:
         """
         Output headers.
+
         Args:
              headers: List or tuple of str headers.
         """
@@ -101,6 +103,7 @@ class HTMLTableFormatter(TableFormatter):
     def row(self, row_data: Union[List[str], Tuple[str]]) -> None:
         """
         Output row.
+
         Args:
              row_data: List or tuple of str fields.
         """
@@ -113,11 +116,12 @@ class HTMLTableFormatter(TableFormatter):
 def create_formatter(fmt: str) -> TableFormatter:
     """
     Creates table formatter based on the input format.
+
     Args:
          fmt: Str - abbreviation of desired format.
          One of the following: txt/csv/html.
     Returns:
-        Child of TableFormatter.
+        instance of TableFormatter descendants.
     Raises:
         ValueError: If fmt argument is not one of predefined.
     """
@@ -139,6 +143,7 @@ def print_table(portfolio: Union[List[stock.Stock], Tuple[stock.Stock]],
                 formatter: TableFormatter) -> None:
     """
     Generalized function for printing user-defined attributes of stocks.
+
     Args:
         portfolio: List or tuple of stocks.
         columns: List of attributes to print.

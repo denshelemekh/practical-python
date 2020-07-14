@@ -2,13 +2,11 @@
 Stock class.
 
 Stores basic stock information.
+
 © Denis Shelemekh, 2020
 """
 
-# try:
-from . import typedproperty as tp
-# except ImportError:
-#     import typedproperty as tp
+from porty import typedproperty as tp
 
 
 class Stock:
@@ -21,13 +19,6 @@ class Stock:
     price = tp.Float('price')
 
     def __init__(self, name: str, shares: int, price: float) -> None:
-        """
-        Class constructor.
-        Args:
-            name: Str - name of the stock.
-            shares: Int - number of shares in the position.
-            price: Float - price of one share.
-        """
         self.name = name
         self.shares = shares
         self.price = price
@@ -50,8 +41,4 @@ class Stock:
         self.shares -= shares
 
     def __repr__(self) -> str:
-        """
-        Returns:
-            Representation of the instance.
-        """
         return f"Stock({self.name}, {self.shares}, {self.price})"

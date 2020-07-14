@@ -6,4 +6,4 @@ Module defining library-specific exceptions.
 
 
 class FormatError(Exception):
-    pass
+    """Custom exception for TableFormatter class"""

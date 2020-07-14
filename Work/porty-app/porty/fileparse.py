@@ -63,8 +63,8 @@ def parse_csv(lines: Iterable[str],
                 row = [func(val) for func, val in zip(types, row)]
             except ValueError as exception:
                 if not silence_errors:
-                    log.warning(f"Row {row_num}: Couldn't convert {row}")
-                    log.debug(f"Row {row_num}: Reason {exception}")
+                    log.warning("Row %d: Couldn't convert %d", row_num, row)
+                    log.debug("Row %d: Reason %s", row_num, str(exception))
                 continue
         if has_headers:
             record = dict(zip(headers, row))
